@@ -1,0 +1,64 @@
+schema: '2.0'
+stages:
+  obter_dados:
+    cmd: python -m src.data.get_data customer-service-classifier dataset/tickets_reclamacoes_classificados.csv
+      data/raw/tickets_reclamacoes_classificados.csv
+    deps:
+    - path: src/data/get_data.py
+      hash: md5
+      md5: 98756b2e21f03e6f01fe27f62386b6e7
+      size: 1085
+    outs:
+    - path: data/raw/tickets_reclamacoes_classificados.csv
+      hash: md5
+      md5: bbe5aa75cad3ed56e95d319e62d51652
+      size: 33020135
+  processar_dados:
+    cmd: python -m src.data.make_dataset data/raw/tickets_reclamacoes_classificados.csv
+      data/processed/dataset_processed.csv
+    deps:
+    - path: data/raw/tickets_reclamacoes_classificados.csv
+      hash: md5
+      md5: bbe5aa75cad3ed56e95d319e62d51652
+      size: 33020135
+    - path: src/data/make_dataset.py
+      hash: md5
+      md5: 1c80b4c87e1cd9db946455bd184a30af
+      size: 1766
+    outs:
+    - path: data/processed/dataset_processed.csv
+      hash: md5
+      md5: bd61326322ab9215bcc0b5ea461be50d
+      size: 30213135
+  processar_features:
+    cmd: python -m src.data.make_feature data/processed/dataset_processed.csv data/processed/dataset_features.csv
+    deps:
+    - path: data/processed/dataset_processed.csv
+      hash: md5
+      md5: bd61326322ab9215bcc0b5ea461be50d
+      size: 30213135
+    - path: src/data/make_feature.py
+      hash: md5
+      md5: c568ab8655de6f8c997289611f48c90e
+      size: 2740
+    outs:
+    - path: data/processed/dataset_features.csv
+      hash: md5
+      md5: 6a45c31f9104a2f51df6b7c1820f08cd
+      size: 163673007
+  treinamento:
+    cmd: python -m src.models.train_model data/processed/dataset_features.csv models/model.pkl
+    deps:
+    - path: data/processed/dataset_features.csv
+      hash: md5
+      md5: 6a45c31f9104a2f51df6b7c1820f08cd
+      size: 163673007
+    - path: src/models/train_model.py
+      hash: md5
+      md5: 78e888990bf8b0d843f8d383c73a9175
+      size: 2699
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: 89824a33e12242396213f0e9d3a5e388
+      size: 1123999
