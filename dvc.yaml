@@ -17,18 +17,22 @@ stages:
     - data/processed/dataset_processed.csv
 
   processar_features:
-    cmd: python -m src.data.make_feature data/processed/dataset_processed.csv data/processed/dataset_features.csv
+    cmd: python -m src.data.make_feature data/processed/dataset_processed.csv data/processed/dataset_features.npz
+      data/processed/dataset_categories.csv
     deps:
     - src/data/make_feature.py
     - data/processed/dataset_processed.csv
     outs:
-    - data/processed/dataset_features.csv
+    - data/processed/dataset_features.npz
+    - data/processed/dataset_categories.csv
 
   treinamento:
-    cmd: python -m src.models.train_model data/processed/dataset_features.csv models/model.pkl
+    cmd: python -m src.models.train_model data/processed/dataset_features.npz data/processed/dataset_categories.csv
+      models/model.pkl
     deps:
     - src/models/train_model.py
-    - data/processed/dataset_features.csv
+    - data/processed/dataset_features.npz
+    - data/processed/dataset_categories.csv
     outs:
     - models/model.pkl
 artifacts:

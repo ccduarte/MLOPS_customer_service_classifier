@@ -7,12 +7,14 @@ import pandas as pd
 import spacy
 import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
+from scipy import sparse
 from src.data import _normalize_text as nt
 
 @click.command()
 @click.argument('input_filepath', type=click.Path(exists=True))
-@click.argument('output_filepath', type=click.Path())
-def main(input_filepath, output_filepath):
+@click.argument('output_filepath_features', type=click.Path())
+@click.argument('output_filepath_categories', type=click.Path())
+def main(input_filepath, output_filepath_features, output_filepath_categories):
     """ Runs feature extraction scripts to turn cleaned data from (../processed) into
         feature matrix ready for modeling (saved in ../features).
     """
@@ -34,8 +36,8 @@ def main(input_filepath, output_filepath):
         return
 
     # Amostrar 10% dos dados
-    #df = df.sample(frac=0.1, random_state=42)
-    #logger.info(f'✅ Amostra de 10% dos dados selecionada: {df.shape[0]} linhas.')
+    #df_sample = df.sample(frac=0.1, random_state=42)
+    #logger.info(f'✅ Amostra de 10% dos dados selecionada: {df_sample.shape[0]} linhas.')
 
     # Combinar stopwords do SpaCy e NLTK
     stops = list(set(nlp.Defaults.stop_words).union(set(nltk.corpus.stopwords.words('portuguese'))))
@@ -45,23 +47,13 @@ def main(input_filepath, output_filepath):
     vect.fit(df['descricao_reclamacao'])
     text_vect = vect.transform(df['descricao_reclamacao'])
 
-    # Converter a matriz esparsa para um DataFrame
-    feature_names = vect.get_feature_names_out()
-    df_features = pd.DataFrame(text_vect.toarray(), columns=feature_names)
+    # Salvar a matriz esparsa em formato .npz
+    sparse.save_npz(output_filepath_features, text_vect)
+    
+    # Salvar a coluna de categorias separadamente
+    df[['categoria']].to_csv(output_filepath_categories, index=False)
 
-    # Adicionar a coluna de categorias ao DataFrame de features
-    df_features['categoria'] = df['categoria']
-
-    # Verificar o tamanho do DataFrame
-    logger.info(f'✅ DataFrame de features criado com {df_features.shape[0]} linhas e {df_features.shape[1]} colunas.')
-
-    # Salvar os vetores em um arquivo CSV
-    logger.info('⌛ Salvando as features no arquivo de saída...')
-    try:
-        df_features.to_csv(output_filepath, index=False)
-        logger.info('✅ Extração de features concluída.')
-    except Exception as e:
-        logger.error(f'❌ Erro ao salvar o arquivo CSV: {e}')
+    logger.info('✅ Extração de features concluída.')
 
 if __name__ == '__main__':
     log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -71,3 +63,5 @@ if __name__ == '__main__':
     load_dotenv(find_dotenv())
 
     main()
+
+
