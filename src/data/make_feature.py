@@ -34,23 +34,23 @@ def main(input_filepath, output_filepath):
         return
 
     # Amostrar 10% dos dados
-    df_sample = df.sample(frac=0.1, random_state=42)
-    logger.info(f'✅ Amostra de 10% dos dados selecionada: {df_sample.shape[0]} linhas.')
+    #df = df.sample(frac=0.1, random_state=42)
+    #logger.info(f'✅ Amostra de 10% dos dados selecionada: {df.shape[0]} linhas.')
 
     # Combinar stopwords do SpaCy e NLTK
     stops = list(set(nlp.Defaults.stop_words).union(set(nltk.corpus.stopwords.words('portuguese'))))
 
     # Vetorização usando TfidfVectorizer
     vect = TfidfVectorizer(ngram_range=(1,1), use_idf=True, stop_words=stops)
-    vect.fit(df_sample['descricao_reclamacao'])
-    text_vect = vect.transform(df_sample['descricao_reclamacao'])
+    vect.fit(df['descricao_reclamacao'])
+    text_vect = vect.transform(df['descricao_reclamacao'])
 
     # Converter a matriz esparsa para um DataFrame
     feature_names = vect.get_feature_names_out()
     df_features = pd.DataFrame(text_vect.toarray(), columns=feature_names)
 
     # Adicionar a coluna de categorias ao DataFrame de features
-    df_features['categoria'] = df_sample['categoria']
+    df_features['categoria'] = df['categoria']
 
     # Verificar o tamanho do DataFrame
     logger.info(f'✅ DataFrame de features criado com {df_features.shape[0]} linhas e {df_features.shape[1]} colunas.')
