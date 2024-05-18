@@ -35,13 +35,6 @@ stages:
     - data/processed/dataset_categories.csv
     outs:
     - models/model.pkl
-artifacts:
-  customer-service-classifier:
-    path: models/model.pkl
-    type: model
-    desc: Modelo declassificação de atendimento
-    labels:
-    - classificação
 metrics:
 - dvclive/metrics.json
 plots:
