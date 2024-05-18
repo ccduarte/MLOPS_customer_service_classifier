@@ -13,8 +13,8 @@ from dvclive import Live
 @click.command()
 @click.argument('input_filepath_features', type=click.Path(exists=True))
 @click.argument('input_filepath_categories', type=click.Path(exists=True))
-@click.argument('model_output_filepath', type=click.Path())
-def main(input_filepath_features, input_filepath_categories, model_output_filepath):
+@click.argument('output_filepath_model', type=click.Path())
+def main(input_filepath_features, input_filepath_categories, output_filepath_model):
     """ Runs training and evaluation scripts to train a model on the processed data and
         evaluate its performance.
     """
@@ -61,10 +61,8 @@ def main(input_filepath_features, input_filepath_categories, model_output_filepa
         live.log_metric('F1 Score', f1)
 
         # Salvar o modelo treinado
-        joblib.dump(model, model_output_filepath)
-        live.log_artifact(model_output_filepath, type="model", name="customer_service_classifier", desc="Modelo de classificacao de atendimento", labels=["classificação"])
-
-        logger.info(f'✅ Modelo salvo em {model_output_filepath}')
+        joblib.dump(model, output_filepath_model)
+        logger.info(f'✅ Modelo salvo em {output_filepath_model}')
 
 if __name__ == '__main__':
     log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'

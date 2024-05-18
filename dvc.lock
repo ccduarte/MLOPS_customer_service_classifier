@@ -32,7 +32,7 @@ stages:
       size: 30213135
   processar_features:
     cmd: python -m src.data.make_feature data/processed/dataset_processed.csv data/processed/dataset_features.npz
-      data/processed/dataset_categories.csv
+      data/processed/dataset_categories.csv models/vectorizer.pkl
     deps:
     - path: data/processed/dataset_processed.csv
       hash: md5
@@ -40,8 +40,8 @@ stages:
       size: 30213135
     - path: src/data/make_feature.py
       hash: md5
-      md5: f44061638083ead69fa099a1d2897afa
-      size: 2369
+      md5: b7a07a42906c53b7fc07ba1899b5c994
+      size: 2611
     outs:
     - path: data/processed/dataset_categories.csv
       hash: md5
@@ -51,6 +51,10 @@ stages:
       hash: md5
       md5: 7117ec51740da668785e2644ea752741
       size: 14056646
+    - path: models/vectorizer.pkl
+      hash: md5
+      md5: d2699c938f08a0b1f6d8822a346dcb44
+      size: 2173828
   treinamento:
     cmd: python -m src.models.train_model data/processed/dataset_features.npz data/processed/dataset_categories.csv
       models/model.pkl
@@ -65,8 +69,8 @@ stages:
       size: 14056646
     - path: src/models/train_model.py
       hash: md5
-      md5: bdabaffbd083b58e2ee04a4137b27b55
-      size: 2917
+      md5: 56442c4bb8ca6b1c03b125a9068e813d
+      size: 2742
     outs:
     - path: models/model.pkl
       hash: md5

@@ -18,13 +18,14 @@ stages:
 
   processar_features:
     cmd: python -m src.data.make_feature data/processed/dataset_processed.csv data/processed/dataset_features.npz
-      data/processed/dataset_categories.csv
+      data/processed/dataset_categories.csv models/vectorizer.pkl
     deps:
     - src/data/make_feature.py
     - data/processed/dataset_processed.csv
     outs:
     - data/processed/dataset_features.npz
     - data/processed/dataset_categories.csv
+    - models/vectorizer.pkl
 
   treinamento:
     cmd: python -m src.models.train_model data/processed/dataset_features.npz data/processed/dataset_categories.csv
