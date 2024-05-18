@@ -8,13 +8,15 @@ import spacy
 import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy import sparse
+import joblib
 from src.data import _normalize_text as nt
 
 @click.command()
 @click.argument('input_filepath', type=click.Path(exists=True))
 @click.argument('output_filepath_features', type=click.Path())
 @click.argument('output_filepath_categories', type=click.Path())
-def main(input_filepath, output_filepath_features, output_filepath_categories):
+@click.argument('output_filepath_vectorizer', type=click.Path())
+def main(input_filepath, output_filepath_features, output_filepath_categories, output_filepath_vectorizer):
     """ Runs feature extraction scripts to turn cleaned data from (../processed) into
         feature matrix ready for modeling (saved in ../features).
     """
@@ -36,8 +38,8 @@ def main(input_filepath, output_filepath_features, output_filepath_categories):
         return
 
     # Amostrar 10% dos dados
-    #df_sample = df.sample(frac=0.1, random_state=42)
-    #logger.info(f'✅ Amostra de 10% dos dados selecionada: {df_sample.shape[0]} linhas.')
+    # df_sample = df.sample(frac=0.1, random_state=42)
+    # logger.info(f'✅ Amostra de 10% dos dados selecionada: {df_sample.shape[0]} linhas.')
 
     # Combinar stopwords do SpaCy e NLTK
     stops = list(set(nlp.Defaults.stop_words).union(set(nltk.corpus.stopwords.words('portuguese'))))
@@ -53,6 +55,10 @@ def main(input_filepath, output_filepath_features, output_filepath_categories):
     # Salvar a coluna de categorias separadamente
     df[['categoria']].to_csv(output_filepath_categories, index=False)
 
+    # Salvar o vetorizador
+    joblib.dump(vect, output_filepath_vectorizer)
+    logger.info('✅ Vetorizador salvo com sucesso!')
+
     logger.info('✅ Extração de features concluída.')
 
 if __name__ == '__main__':
@@ -63,5 +69,6 @@ if __name__ == '__main__':
     load_dotenv(find_dotenv())
 
     main()
+
 
 
