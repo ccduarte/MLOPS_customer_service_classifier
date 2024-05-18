@@ -62,6 +62,8 @@ def main(input_filepath_features, input_filepath_categories, model_output_filepa
 
         # Salvar o modelo treinado
         joblib.dump(model, model_output_filepath)
+        live.log_artifact(model_output_filepath, type="model", name="customer_service_classifier", desc="Modelo de classificacao de atendimento", labels=["classificação"])
+
         logger.info(f'✅ Modelo salvo em {model_output_filepath}')
 
 if __name__ == '__main__':

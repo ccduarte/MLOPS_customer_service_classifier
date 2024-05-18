@@ -40,3 +40,10 @@ metrics:
 plots:
 - dvclive/plots/metrics:
     x: step
+artifacts:
+  customer_service_classifier:
+    path: models/model.pkl
+    type: model
+    desc: Modelo de classificacao de atendimento
+    labels:
+    - classificação
