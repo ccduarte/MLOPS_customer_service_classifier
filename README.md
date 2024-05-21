@@ -1,7 +1,17 @@
-MLOPS_customer_service_classifier
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://quantumfinancesac.streamlit.app)
+[![GitHub](https://img.shields.io/badge/GitHub-Repositório%20app-black)](https://github.com/ccduarte/MLOPS_customer_service_classifier-front)
+[![GitHub](https://img.shields.io/badge/GitHub-Repositório%20API-black)](https://github.com/ccduarte/MLOPS_customer_service_classifier-api)
+
+Modelo de classificação de atendimento.
 ==============================
 
-Testing MLOps skills
+Este repositório contém o desenvolvimento de um modelo de classificação textual de atendimento da startup QuantumFinance e faz parte do projeto da disciplina de MLOps do curso MBA Data Science & Artificial Intelligence da FIAP.
+
+O objetivo desse modelo é colocar em prática tecnicas de MLOps, o foco não é o modelo em si apresentado. 
+
+O experimentos são devidamente rastreáveis pelo DVC. 
+[![DVC](https://img.shields.io/badge/DVC-Registro%20Experimentos-blue)](https://studio.iterative.ai/user/ccduarte/projects/MLOPS_customer_service_classifier-dcvyyf364b)
+
 
 Project Organization
 ------------
